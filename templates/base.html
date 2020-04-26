@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>{% block title %} {% endblock title %}</title>
+    {% block css %} {% endblock css %}
+  </head>
+  <body>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="/">iCoder</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item {% block homeActive %} {% endblock homeActive %}">
+            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item {% block aboutActive %} {% endblock aboutActive %}">
+            <a class="nav-link" href="/about">About</a>
+          </li>
+          <li class="nav-item {% block blogActive %} {% endblock blogActive %}">
+            <a class="nav-link" href="/blog">Blogs</a>
+          </li>
+          <li class="nav-item {% block contactActive %} {% endblock contactActive %}">
+            <a class="nav-link" href="/contact">Contact Us</a>
+          </li>
+        </ul>
+        <div class="ml-auto form-inline">
+          <form method="get" action="/search" class="my-2 my-lg-0">            
+            <div class="input-group">
+              <input class="form-control mr-0" type="search" placeholder="Search" aria-label="Search" name="query" id="query">
+              <div class="input-group-append">
+                <button class="btn btn-success" type="submit">Search</button>
+              </div>
+            </div>
+          </form>
+          {% if user.is_authenticated %}
+            <ul class="navbar-nav">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Welcome: {{request.user}}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/logout">Log Out</a>
+                </div>
+              </li> 
+            </ul>      
+          {% else %}
+          <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#LogIn"> LogIn </button>
+          <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#SignUp"> SignUp </button>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} mb-1 alert-dismissible fade show" role="alert">
+          <strong style="text-transform: capitalize;">{{ message.tags }}!</strong> {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endfor %}
+    </div>
+
+<!--  LogIn Modal -->
+<div class="modal fade" id="LogIn" tabindex="-1" role="dialog" aria-labelledby="LogInLevel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="LogInLevel">LogIn Here</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/login" method="post"> {% csrf_token %}
+          <div class="form-group">
+            <label for="mobile">Mobile No.:</label>
+            <input type="tel" class="form-control" id="mobile" name="mobile" aria-describedby="emailHelp" placeholder="Enter number..." Required>
+            <small id="emailHelp" class="form-text text-muted">We'll never share your mobile with anyone else.</small>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password..." Required>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="checked" name="checked">
+            <label class="form-check-label" for="checked">Check me out</label>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--  SignUp Modal -->
+<div class="modal fade" id="SignUp" tabindex="-1" role="dialog" aria-labelledby="SignUpLevel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="SignUpLevel">SignUp Here</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/signup" method="post"> {% csrf_token %}
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="fname">First Name:</label>
+              <input type="text" class="form-control" id="fname" name="fname" placeholder="first name..." Required>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="lname">Last Name:</label>
+              <input type="text" class="form-control" id="lname" name="lname" placeholder="last name..." Required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="email">Email:</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="email..." Required>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="mobile">Mobile:</label>
+                <input type="text" class="form-control" id="mobile" name="mobile" placeholder="mobile..." Required>
+              </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="psw">Create Password:</label>
+              <input type="password" class="form-control" id="psw" name="psw" placeholder="password..." Required>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="repsw">Re-Password:</label>
+              <input type="password" class="form-control" id="repsw" name="repsw" placeholder="re-password..." Required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary"> Submit </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+    {% block body %} {% endblock body %}
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    {% block js %} {% endblock js %}
+    <script>
+    /* restrict user browser click go back button */
+    function preback() { window.history.forward(); }
+    setTimeout("preback()", 0);
+    window.onunload = function() { null };
+
+    /* Left click dissabled (not select any content or text)*/
+    function disableselect(e) { return false; }
+
+    function reEnable() { return true; }
+    document.onselectstart = new Function("return false")
+    if (window.sidebar) {
+        document.onmousedown = disableselect
+        document.onclick = reEnable
+    }
+
+    /* Right click dissabled */
+    function ieClicked() { if (document.all) { return false; } }
+
+    function firefoxClicked(e) { if (document.layers || (document.getElementById && !document.all)) { if (e.which == 2 || e.which == 3) { return false; } } }
+    if (document.layers) {
+        document.captureEvents(Event.MOUSEDOWN);
+        document.onmousedown = firefoxClicked;
+    } else {
+        document.onmouseup = firefoxClicked;
+        document.oncontextmenu = ieClicked;
+    }
+    document.oncontextmenu = new Function("return false")
+
+    /* Dissable shortcut key */
+    document.onkeydown = function(e) {
+        if ((e.ctrlKey && e.shiftKey && (e.keyCode === 73)) || (e.ctrlKey && (e.keyCode === 65 || e.keyCode === 67 || e.keyCode === 72 || e.keyCode === 74 || e.keyCode === 78 || e.keyCode === 79 || e.keyCode === 80 || e.keyCode === 82 || e.keyCode === 83 || e.keyCode === 85 || e.keyCode === 86 || e.keyCode === 88 || e.keyCode === 89 || e.keyCode === 90))) { return false; }
+        return true;
+    };
+    </script>
+  </body>
+</html>

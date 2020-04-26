@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %} {{slug}} {% endblock title %}
+{% block blogActive %} active {% endblock blogActive %}
+
+{% block body %}
+    <div class="container">
+        <div class="blog-post">
+            <h2 class="blog-post-title">{{post.title}}</h2>
+            <p class="blog-post-meta">{{post.timeStamp}} by <a href="">{{post.author}}</a></p>
+            <p class="text-justify">{{post.content}}</p>
+            <hr>
+          </div>
+    </div>
+
+    <div class="container">
+        <h1>Comments <sup class="text-danger">({{comments.count}})</sup></h1>
+        {% if user.is_authenticated %}
+            <form action="/blog/postComment" method="post"> {% csrf_token %}<form>
+                <div class="form-group">
+                    <input type="hidden" name="postSno" value="{{post.sno}}">
+                    <input type="hidden" name="parentSno" value="">
+                    <label for="comment">Post Comments</label>
+                    <textarea class="form-control"  id="comment" name="comment" placeholder="type any comment here..." rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        {% else %}
+            <h5>Please login for post any comments.</h5><hr>
+        {% endif %}
+        
+        
+        
+        {% for comment in comments %}
+            <div class="row my-2">
+                <div class="col-md-1"><img src="/static/img/uimg.png" alt="User" class="rounded-circle w-100"></div>
+                <div class="col-md-11">
+                    <p><b class="text-danger">{{comment.user.username}}</b><sub class="text-secondary pl-1"> ({{comment.timeStamp|naturaltime}})</sub></p>
+                    <div class="text-justify">{{comment.comment}}</div>
+
+                    <div class="container mx-0">
+                        <a data-toggle="collapse" href="#reply{{comment.sno}}" role="button" aria-expanded="false" aria-controls="reply{{comment.sno}}">Reply</a>
+                        <div class="collapse" id="reply{{comment.sno}}">
+                            <div class="card card-body">
+                                <form action="/blog/postComment" method="post"> {% csrf_token %}<form>
+                                    <div class="form-group">
+                                        <input type="hidden" name="postSno" value="{{post.sno}}">
+                                        <input type="hidden" name="parentSno" value="{{comment.sno}}">
+                                        <label for="comment">Post a reply</label>
+                                        <textarea class="form-control"  id="comment" name="comment" placeholder="type any comment here..." rows="3"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div><hr>
+        {% endfor %}
+    </div>
+{% endblock body %}
