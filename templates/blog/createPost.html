@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %} Create Post {% endblock title %}
+
+{% block body %}
+    <div class="container my-3">
+        <h2>Create new Post here</h2>
+        <form action="/blog/createPost" method="post"> {% csrf_token %}
+            <input type="hidden" name="name" value="{{user.get_full_name}}">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" id="title" name="title" placeholder="title for this post...">
+            </div>
+            <div class="form-group">
+                <label for="slug">Shortcut Access this post</label>
+                <input type="text" class="form-control" id="slug" name="slug" placeholder="enter any string...">
+            </div>
+            <div class="form-group">
+                <label for="content">Content</label>
+                <textarea class="form-control" id="content" name="content" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+{% endblock body %}

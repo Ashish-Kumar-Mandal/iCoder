@@ -17,7 +17,7 @@
     <div class="container">
         <h1>Comments <sup class="text-danger">({{comments.count}})</sup></h1>
         {% if user.is_authenticated %}
-            <form action="/blog/postComment" method="post"> {% csrf_token %}<form>
+            <form action="/blog/postComment" method="post"> {% csrf_token %}
                 <div class="form-group">
                     <input type="hidden" name="postSno" value="{{post.sno}}">
                     <input type="hidden" name="parentSno" value="">
@@ -43,7 +43,7 @@
                         <a data-toggle="collapse" href="#reply{{comment.sno}}" role="button" aria-expanded="false" aria-controls="reply{{comment.sno}}">Reply</a>
                         <div class="collapse" id="reply{{comment.sno}}">
                             <div class="card card-body">
-                                <form action="/blog/postComment" method="post"> {% csrf_token %}<form>
+                                <form action="/blog/postComment" method="post"> {% csrf_token %}
                                     <div class="form-group">
                                         <input type="hidden" name="postSno" value="{{post.sno}}">
                                         <input type="hidden" name="parentSno" value="{{comment.sno}}">
