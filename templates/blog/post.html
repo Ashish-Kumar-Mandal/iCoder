@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load humanize %}
+{% load extras %}
 
 {% block title %} {{slug}} {% endblock title %}
 {% block blogActive %} active {% endblock blogActive %}
@@ -27,10 +28,10 @@
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         {% else %}
-            <h5>Please login for post any comments.</h5><hr>
+            <h5>Please login for comments any post.</h5><hr>
         {% endif %}
-        
-        
+
+
         
         {% for comment in comments %}
             <div class="row my-2">
@@ -42,7 +43,7 @@
                     <div class="container mx-0">
                         <a data-toggle="collapse" href="#reply{{comment.sno}}" role="button" aria-expanded="false" aria-controls="reply{{comment.sno}}">Reply</a>
                         <div class="collapse" id="reply{{comment.sno}}">
-                            <div class="card card-body">
+                            {% if user.is_authenticated %}
                                 <form action="/blog/postComment" method="post"> {% csrf_token %}
                                     <div class="form-group">
                                         <input type="hidden" name="postSno" value="{{post.sno}}">
@@ -52,8 +53,17 @@
                                     </div>
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                 </form>
-                            </div>
+                            {% else %}
+                                <h5>Please login for reply any comments.</h5><hr>
+                            {% endif %}
                         </div>
+
+                        <div class="replies bg-danger my-2">
+                            {% for reply in replyDict|get_val:comment.sno %}
+                                {{reply.timeStamp}}<br>
+                            {% endfor %}
+                        </div>
+
                     </div>
 
                 </div>
