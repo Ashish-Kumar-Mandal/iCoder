@@ -30,8 +30,8 @@
         {% else %}
             <h5>Please login for comments any post.</h5><hr>
         {% endif %}
-
-
+        
+        
         
         {% for comment in comments %}
             <div class="row my-2">
@@ -57,13 +57,17 @@
                                 <h5>Please login for reply any comments.</h5><hr>
                             {% endif %}
                         </div>
-
-                        <div class="replies bg-danger my-2">
+                        <div class="replies">
                             {% for reply in replyDict|get_val:comment.sno %}
-                                {{reply.timeStamp}}<br>
+                                <hr><div class="row my-2">
+                                    <div class="col-md-1"><img src="/static/img/uimg.png" alt="User" class="rounded-circle w-100"></div>
+                                    <div class="col-md-11">
+                                        <p><b class="text-danger">{{reply.user.username}}</b><sub class="text-secondary pl-1"> ({{reply.timeStamp|naturaltime}})</sub></p>
+                                        <div class="text-justify">{{reply.comment}}</div>
+                                    </div>
+                                </div>
                             {% endfor %}
                         </div>
-
                     </div>
 
                 </div>
