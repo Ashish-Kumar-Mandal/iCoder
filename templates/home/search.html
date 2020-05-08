@@ -26,7 +26,9 @@
                             <a class="text-dark">{{post.title}}</a>
                         </h3>
                         <div class="mb-1 text-muted">{{post.timeStamp}}</div>
-                        <p class="card-text mb-auto">{{post.content|truncatechars:500}}...</p>
+                        <div class="preview text-justify">
+                            <p class="card-text mb-auto">{{post.content|safe|truncatechars:500}}...</p>
+                        </div>
                         <a href="blog/{{post.slug}}" role="button" class="btn btn-success btn-sm mt-3">Continue reading...</a>
                     </div>
                 </div>

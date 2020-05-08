@@ -10,6 +10,11 @@
 
     <title>{% block title %} {% endblock title %}</title>
     {% block css %} {% endblock css %}
+    <style>
+      .text-justify{
+        text-align: justify;
+      }
+    </style>
   </head>
   <body>
     
@@ -47,10 +52,9 @@
             <ul class="navbar-nav">
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Welcome: {{request.user}}
+                  {{request.user}}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="/blog/createPost">Create New Post</a>
                   <a class="dropdown-item" href="/logout">Log Out</a>
                 </div>
               </li> 
@@ -162,7 +166,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     {% block js %} {% endblock js %}
-    <script>
+    <!--script>
     /* restrict user browser click go back button */
     function preback() { window.history.forward(); }
     setTimeout("preback()", 0);
@@ -196,6 +200,14 @@
         if ((e.ctrlKey && e.shiftKey && (e.keyCode === 73)) || (e.ctrlKey && (e.keyCode === 65 || e.keyCode === 67 || e.keyCode === 72 || e.keyCode === 74 || e.keyCode === 78 || e.keyCode === 79 || e.keyCode === 80 || e.keyCode === 82 || e.keyCode === 83 || e.keyCode === 85 /* || e.keyCode === 88*/ || e.keyCode === 89 || e.keyCode === 90))) { return false; }
         return true;
     };
-    </script>
+    </script-->
+
+<script>
+  //  safe mode convert into planetext of each blog.
+  let previews = document.getElementsByClassName('preview');
+  Array.from(previews).forEach((element)=>{
+      element.innerHTML = element.innerText;
+  })
+</script>
   </body>
 </html>

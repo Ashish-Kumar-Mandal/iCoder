@@ -6,7 +6,5 @@ urlpatterns = [
     path('postComment', views.postComment, name='PostComment'),
 
     path('', views.index, name='Index'),
-    path('createPost', views.createPost, name='CreatePost'),
-    path('<str:slug>', views.blogPost, name='Post'),
-    
+    path('<str:slug>', views.blogPost, name='Post'),    
 ]

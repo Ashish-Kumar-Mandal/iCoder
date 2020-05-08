@@ -44,22 +44,3 @@ def postComment(request):
             messages.success(request, 'Your reply has been posted successfully.')
         
     return redirect(f"/blog/{post.slug}")
-
-
-def createPost(request):
-    if request.method=="POST":
-        title = request.POST.get('title')
-        content = request.POST.get('content')
-        author = request.POST.get('name')
-        slug = request.POST.get('slug')
-
-        if author=="":
-            messages.error(request, 'Please Login then you can create any NEW-POST!.')
-        elif title=="" or content=="" or slug=="":
-            messages.error(request, 'All fields are required!.')
-        else:
-            newpost = Post(title=title, content=content, author=author, slug=slug)
-            newpost.save()
-            messages.success(request, 'Your New-Post has been saved successfully.')
-
-    return render(request, 'blog/createPost.html')

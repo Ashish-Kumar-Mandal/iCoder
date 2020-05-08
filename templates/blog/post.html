@@ -10,7 +10,7 @@
         <div class="blog-post">
             <h2 class="blog-post-title">{{post.title}}</h2>
             <p class="blog-post-meta">{{post.timeStamp}} by <a href="">{{post.author}}</a></p>
-            <p class="text-justify">{{post.content}}</p>
+            <p class="text-justify">{{post.content|safe}}</p>
             <hr>
           </div>
     </div>
@@ -23,7 +23,7 @@
                     <input type="hidden" name="postSno" value="{{post.sno}}">
                     <input type="hidden" name="parentSno" value="">
                     <label for="comment">Post Comments</label>
-                    <textarea class="form-control"  id="comment" name="comment" placeholder="type any comment here..." rows="3"></textarea>
+                    <textarea class="form-control"  id="comment" name="comment" placeholder="type any comment here..." rows="2"></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
@@ -37,32 +37,30 @@
             <div class="row my-2">
                 <div class="col-md-1"><img src="/static/img/uimg.png" alt="User" class="rounded-circle w-100"></div>
                 <div class="col-md-11">
-                    <p><b class="text-danger">{{comment.user.username}}</b><sub class="text-secondary pl-1"> ({{comment.timeStamp|naturaltime}})</sub></p>
+                    <p><b class="text-danger">{{comment.user.get_full_name}}</b><sub class="text-secondary pl-1"> ({{comment.timeStamp|naturaltime}})</sub></p>
                     <div class="text-justify">{{comment.comment}}</div>
 
                     <div class="container mx-0">
-                        <a data-toggle="collapse" href="#reply{{comment.sno}}" role="button" aria-expanded="false" aria-controls="reply{{comment.sno}}">Reply</a>
-                        <div class="collapse" id="reply{{comment.sno}}">
-                            {% if user.is_authenticated %}
+                        {% if user.is_authenticated %}
+                            <a data-toggle="collapse" href="#reply{{comment.sno}}" role="button" aria-expanded="false" aria-controls="reply{{comment.sno}}">Reply</a>
+                            <div class="collapse" id="reply{{comment.sno}}">                            
                                 <form action="/blog/postComment" method="post"> {% csrf_token %}
                                     <div class="form-group">
                                         <input type="hidden" name="postSno" value="{{post.sno}}">
                                         <input type="hidden" name="parentSno" value="{{comment.sno}}">
                                         <label for="comment">Post a reply</label>
-                                        <textarea class="form-control"  id="comment" name="comment" placeholder="type any comment here..." rows="3"></textarea>
+                                        <textarea class="form-control"  id="comment" name="comment" placeholder="type any comment here..." rows="2"></textarea>
                                     </div>
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                 </form>
-                            {% else %}
-                                <h5>Please login for reply any comments.</h5><hr>
-                            {% endif %}
-                        </div>
+                            </div>
+                        {% endif %}
                         <div class="replies">
                             {% for reply in replyDict|get_val:comment.sno %}
                                 <hr><div class="row my-2">
                                     <div class="col-md-1"><img src="/static/img/uimg.png" alt="User" class="rounded-circle w-100"></div>
                                     <div class="col-md-11">
-                                        <p><b class="text-danger">{{reply.user.username}}</b><sub class="text-secondary pl-1"> ({{reply.timeStamp|naturaltime}})</sub></p>
+                                        <p><b class="text-danger">{{reply.user.get_full_name}}</b><sub class="text-secondary pl-1"> ({{reply.timeStamp|naturaltime}})</sub></p>
                                         <div class="text-justify">{{reply.comment}}</div>
                                     </div>
                                 </div>
